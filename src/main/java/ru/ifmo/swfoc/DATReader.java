@@ -32,14 +32,14 @@ public class DATReader {
         }
 
         for (int i = 0; i < recordsNumber; i++) {
-            values[i] = readString(fileInputStream, valueLengths[i]);
+            values[i] = readString(fileInputStream, valueLengths[i], "UTF-16LE");
         }
 
         for (int i = 0; i < recordsNumber; i++) {
-            keys[i] = readString(fileInputStream, keyLengths[i]);
+            keys[i] = readString(fileInputStream, keyLengths[i], "US-ASCII");
         }
 
-        Map<String, String> records = new HashMap<String, String>((int) (recordsNumber*1.6));
+        Map<String, String> records = new HashMap<>((int) (recordsNumber * 1.6));
         for (int i = 0; i < recordsNumber; i++) {
             records.put(keys[i], values[i]);
         }
@@ -47,10 +47,10 @@ public class DATReader {
         return records;
     }
 
-    private String readString(FileInputStream inputStream, int length) throws IOException {
+    private String readString(FileInputStream inputStream, int length, String encoding) throws IOException {
         byte[] bytes = new byte[length];
         inputStream.read(bytes);
-        return new String(bytes);
+        return new String(bytes, encoding);
     }
 
     private int readInt(FileInputStream inputStream) throws IOException {
