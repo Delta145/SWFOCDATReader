@@ -1,5 +1,7 @@
 package ru.ifmo.swfoc;
 
+import lombok.Data;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -7,6 +9,7 @@ import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
+@Data
 public class DATReader {
     private File processingFile;
     private byte[] byteBuffer = new byte[4];
@@ -30,18 +33,14 @@ public class DATReader {
             keyLengths[i] = readInt(fileInputStream);
         }
 
-        for (int i = 0; i < recordsNumber; i++) {
+        for (int i = 0; i < recordsNumber; i++)
             values[i] = readString(fileInputStream, valueLengths[i], "UTF-16LE");
-        }
-
-        for (int i = 0; i < recordsNumber; i++) {
+        for (int i = 0; i < recordsNumber; i++)
             keys[i] = readString(fileInputStream, keyLengths[i], "US-ASCII");
-        }
 
         Map<String, String> records = new HashMap<>((int) (recordsNumber * 1.6));
-        for (int i = 0; i < recordsNumber; i++) {
+        for (int i = 0; i < recordsNumber; i++)
             records.put(keys[i], values[i]);
-        }
 
         return records;
     }
@@ -54,9 +53,8 @@ public class DATReader {
 
     private int readInt(FileInputStream inputStream) throws IOException {
         inputStream.read(byteBuffer);
-        for (int i = 0; i < byteBuffer.length; i++) {
+        for (int i = 0; i < byteBuffer.length; i++)
             byteBufferReverse[byteBufferReverse.length-1-i] = byteBuffer[i];
-        }
         ByteBuffer wrapped = ByteBuffer.wrap(byteBufferReverse);
         return wrapped.getInt();
     }
